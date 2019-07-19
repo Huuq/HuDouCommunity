@@ -1,5 +1,7 @@
 package club.qh.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,7 +24,9 @@ public class AuthorizeController {
 	@Value("$(github.redirect.uri)")
 	private String redirectUri;
 	@RequestMapping("/callBack")
-	public String callBack(@RequestParam(name="code")String code,@RequestParam(name="state")String state) {
+	public String callBack(@RequestParam(name="code")String code,@RequestParam(name="state")String state,
+			HttpServletRequest request
+			) {
 		AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 		accessTokenDTO.setCode(code);
 		accessTokenDTO.setState(state);
@@ -31,8 +35,13 @@ public class AuthorizeController {
 		accessTokenDTO.setClient_secret(clientSecret);
 		String accessToken=gitHubProvider.getAccessToken(accessTokenDTO);
 		GitHubUser user = gitHubProvider.getUser(accessToken);
-		System.out.println(user);
-		return "index";
+		if(user!=null) {
+			request.getSession().setAttribute("user", user);
+			return "redirect:/";
+		}
+		else {
+			return "redirect:/";
+		}		
 	}
 
 }
