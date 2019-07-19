@@ -1,9 +1,9 @@
 package club.qh.web.dto;
 
 public class GitHubUser {
-	  private String name;
-	  private Long id;
-	  private String bio;
+    private String name;
+    private Long id;
+    private String bio;
 	public String getName() {
 		return name;
 	}
