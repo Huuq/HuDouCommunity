@@ -2,7 +2,9 @@
 
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +33,7 @@ public class AuthorizeController {
 	private String redirectUri;
 	@RequestMapping("/callback")
 	public String callBack(@RequestParam(name="code")String code,@RequestParam(name="state")String state,
-			HttpServletRequest request
+			HttpServletRequest request,HttpServletResponse response
 			) {
 		AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 		accessTokenDTO.setCode(code);
@@ -43,12 +45,15 @@ public class AuthorizeController {
 		GitHubUser user = gitHubProvider.getUser(accessToken);
 		if(user!=null) {
 			User userInsert = new User();
-			userInsert.setToken(UUID.randomUUID().toString());
+			String token = UUID.randomUUID().toString();
+			userInsert.setToken(token);
 			userInsert.setName(user.getName());
-			userInsert.setAccountId(String.valueOf(user.getId()));
+			userInsert.setAccountId(String.valueOf(user.getId())); 
 			userInsert.setGmtCreate(System.currentTimeMillis());
 			userInsert.setGmtModified(userInsert.getGmtCreate());
 			userMapper.insert(userInsert);
+			//将token放入cookie中
+			response.addCookie(new Cookie("token", token));
 			request.getSession().setAttribute("user", user);
 			return "redirect:/";
 		}
