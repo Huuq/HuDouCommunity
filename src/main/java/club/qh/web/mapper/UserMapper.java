@@ -1,5 +1,7 @@
 package club.qh.web.mapper;
 
+
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,5 +15,8 @@ public interface UserMapper {
 	void insert(User user);
     @Select("select * from user where token=#{token}")
 	User findByToken(@Param("token")String token);
+    @Select("select * from user where id=#{id}")
+	User findById(@Param("id")Integer id);
+
 
 }
