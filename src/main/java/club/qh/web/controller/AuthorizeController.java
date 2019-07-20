@@ -51,7 +51,8 @@ public class AuthorizeController {
 			userInsert.setAccountId(String.valueOf(user.getId())); 
 			userInsert.setGmtCreate(System.currentTimeMillis());
 			userInsert.setGmtModified(userInsert.getGmtCreate());
-			userMapper.insert(userInsert);
+			userInsert.setAvaterUrl(user.getAvaterUrl());
+			userMapper.insert(userInsert);			
 			//将token放入cookie中
 			response.addCookie(new Cookie("token", token));
 			request.getSession().setAttribute("user", user);

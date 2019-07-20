@@ -1,5 +1,8 @@
 package club.qh.web.Model;
 
+import lombok.Data;
+
+@Data
 public class User {
     private Integer id;
     private String name;
@@ -7,6 +10,8 @@ public class User {
     private String token;
     private long gmtCreate;
     private long gmtModified;
+    private String avaterUrl;
+    
 	public Integer getId() {
 		return id;
 	}
@@ -43,7 +48,11 @@ public class User {
 	public void setGmtModified(long gmtModified) {
 		this.gmtModified = gmtModified;
 	}
-  
-  
-  
+	public String getAvaterUrl() {
+		return avaterUrl;
+	}
+	public void setAvaterUrl(String avaterUrl) {
+		this.avaterUrl = avaterUrl;
+	}  
+    
 }
