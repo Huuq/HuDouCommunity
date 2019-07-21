@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import club.qh.web.Model.User;
+import club.qh.web.dto.PaginationDTO;
 import club.qh.web.dto.QuestionDTO;
 
 import club.qh.web.mapper.UserMapper;
@@ -27,7 +29,8 @@ public class UserController {
    private QuestionService questionService;
    
    @RequestMapping("/tohome")
-   public String toHome(HttpServletRequest request,ModelMap model) {
+   public String toHome(HttpServletRequest request,ModelMap model,@RequestParam(name="page",defaultValue = "1")Integer page
+		   ,@RequestParam(name="size",defaultValue = "3")Integer size) {
 	   Cookie[] cookies = request.getCookies();
 	   if(cookies!=null&&cookies.length!=0) {
 		   for(Cookie cookie:cookies) {
@@ -42,9 +45,9 @@ public class UserController {
 		   }
 	   }	  
 	   System.out.println("开始查询数据库问题的列表");
-	   List<QuestionDTO> questions = questionService.listQuestion();
-	   System.out.println(questions.get(0).getUser().getAvaterUrl());
-	   model.addAttribute("questions", questions);	  
+	   //List<QuestionDTO> questions = questionService.listQuestion(page,size);
+	   PaginationDTO pagination = questionService.listQuestion(page, size);
+	   model.addAttribute("pagination", pagination);	  
 	   return "index";
    }	
 }

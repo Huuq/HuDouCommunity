@@ -21,3 +21,6 @@ body{
 	height:50px;
 	marign:10px;
 }
+.pagination{
+	float:right;
+}
