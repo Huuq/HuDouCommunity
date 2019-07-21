@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import club.qh.web.Model.Question;
 import club.qh.web.Model.User;
 import club.qh.web.dto.PaginationDTO;

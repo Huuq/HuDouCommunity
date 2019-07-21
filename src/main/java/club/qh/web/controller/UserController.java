@@ -1,8 +1,5 @@
 package club.qh.web.controller;
 
-
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import club.qh.web.Model.User;
 import club.qh.web.dto.PaginationDTO;
-import club.qh.web.dto.QuestionDTO;
-
 import club.qh.web.mapper.UserMapper;
 import club.qh.web.service.QuestionService;
 
@@ -37,8 +32,7 @@ public class UserController {
 			   if(cookie.getName().equals("token")) {
 				   String token = cookie.getValue();
 				   User user = userMapper.findByToken(token); 
-				   if(user!=null) {
-					   user.setName("Huuq");
+				   if(user!=null) {					
 					   request.getSession().setAttribute("user", user);
 				   }
 				   break;
