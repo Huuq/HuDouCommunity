@@ -38,6 +38,7 @@ public class UserController {
 				   String token = cookie.getValue();
 				   User user = userMapper.findByToken(token); 
 				   if(user!=null) {
+					   user.setName("Huuq");
 					   request.getSession().setAttribute("user", user);
 				   }
 				   break;
