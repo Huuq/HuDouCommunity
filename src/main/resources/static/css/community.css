@@ -24,3 +24,10 @@ body{
 .pagination{
 	float:right;
 }
+.img-circle{
+	width:25px;
+	height:25px;
+}
+.list-group{	
+    margin-top: 15px;
+}

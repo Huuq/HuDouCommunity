@@ -25,14 +25,16 @@ public class UserController {
    
    @RequestMapping("/tohome")
    public String toHome(HttpServletRequest request,ModelMap model,@RequestParam(name="page",defaultValue = "1")Integer page
-		   ,@RequestParam(name="size",defaultValue = "3")Integer size) {
+		   ,@RequestParam(name="size",defaultValue = "8")Integer size) {
 	   Cookie[] cookies = request.getCookies();
 	   if(cookies!=null&&cookies.length!=0) {
 		   for(Cookie cookie:cookies) {
 			   if(cookie.getName().equals("token")) {
 				   String token = cookie.getValue();
 				   User user = userMapper.findByToken(token); 
-				   if(user!=null) {					
+				   if(user!=null) {				
+					   System.out.println(user.toString());
+					   user.setName("Mr_Right");
 					   request.getSession().setAttribute("user", user);
 				   }
 				   break;
@@ -45,4 +47,8 @@ public class UserController {
 	   model.addAttribute("pagination", pagination);	  
 	   return "index";
    }	
+   @RequestMapping("/wechat")
+   public String weChat() {	   
+	   return "wechat";
+   }
 }
