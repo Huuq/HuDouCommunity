@@ -1,6 +1,5 @@
 package club.qh.web.controller;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import club.qh.web.Model.Question;
 import club.qh.web.Model.User;
 import club.qh.web.mapper.QuestionMapper;
-import club.qh.web.mapper.UserMapper;
 
 @Controller
 public class PublishController {
 	@Autowired
 	private QuestionMapper questionMapper;
-	
-	@Autowired
-	private UserMapper userMapper;
-	
+
 	@RequestMapping("/publish")
 	public String toPublish(Question question) {
 		return "publish";
@@ -34,22 +29,9 @@ public class PublishController {
 			@RequestParam("tag") String tag,	
 			HttpServletRequest request,Model model)
 	{
-		System.out.println("将发布信息提交到数据库");
-		User user = null;
+		System.out.println("将发布信息提交到数据库");	
 		Question question = new Question();
-		Cookie[] cookies = request.getCookies();
-		if(cookies!=null&&cookies.length!=0) {
-			  for(Cookie cookie:cookies) {
-				  if(cookie.getName().equals("token")) {
-					  String token = cookie.getValue();
-					  user = userMapper.findByToken(token); 
-					  if(user!=null) {
-						  request.getSession().setAttribute("user", user);
-					  }
-					  break;
-				  }			
-		      }
-		}		
+		User user = (User)request.getSession().getAttribute("user");	
 		if(user == null) {
 			model.addAttribute("error", "未登录");
 			return "publish";
@@ -62,7 +44,7 @@ public class PublishController {
 		question.setCreator(user.getId());
 		question.setGmtModified(question.getGmtCreate());
 		questionMapper.createQuestion(question);
-		return "redirect:/";
+		return "redirect:/tohome";
 	}
 
 }

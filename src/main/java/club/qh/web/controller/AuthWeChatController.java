@@ -30,7 +30,7 @@ public class AuthWeChatController{
 	private String grantType;
 	@Value("$(wx.secret)")
 	private String secret;
-	@RequestMapping("/callback")
+	@RequestMapping("/callbackWeChatLogin")
 	public String callBack(@RequestParam(name="code")String code,@RequestParam(name="code")String openID,@RequestParam(name="state")String state,
 			HttpServletRequest request,HttpServletResponse response
 			) {

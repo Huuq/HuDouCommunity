@@ -11,7 +11,7 @@ import club.qh.web.Model.User;
 
 @Mapper
 public interface UserMapper {
-	@Insert("insert into user(name,accound_id,token,gmt_create,gmt_modified,avater_url) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avaterUrl})")
+	@Insert("insert into user(name,accound_id,token,gmt_create,gmt_modified,avatar_url,bio,company,blog,location) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl},#{bio},#{company},#{blog},#{location})")
 	void insert(User user);
     @Select("select * from user where token=#{token}")
 	User findByToken(@Param("token")String token);

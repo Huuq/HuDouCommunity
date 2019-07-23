@@ -25,16 +25,16 @@ public String getAccessToken(AccessTokenDTO accessTokenDTO) {
     MediaType mediaType  = MediaType.get("application/json; charset=utf-8");
 	OkHttpClient client = new OkHttpClient();
 	RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDTO));
+	System.out.println(body+"body");
     Request request = new Request.Builder()
       .url("https://github.com/login/oauth/access_token")
       .post(body)
       .build();
-   try (Response response = client.newCall(request).execute()) {
-       String string = response.body().string();
+   try (Response response = client.newCall(request).execute()) {		 
+       String string = response.body().string();     
        String[] spit = string.split("&");
        String tokenstr = spit[0];
-       String token = tokenstr.split("=")[1];
-	   System.out.println(token);
+       String token = tokenstr.split("=")[1];	  
 	   return token;
       } catch (Exception e) {	
 		e.printStackTrace();
@@ -43,16 +43,16 @@ public String getAccessToken(AccessTokenDTO accessTokenDTO) {
    }
    
    
-   public GitHubUser getUser(String access_Token){
+   public GitHubUser getUser(String access_Token){	
 	   OkHttpClient client = new OkHttpClient();
 	    Request request = new Request.Builder()
 	    	      .url("https://api.github.com/user?access_token="+access_Token)
 	    	      .build();
 	   
 	try {
-		Response response = client.newCall(request).execute();
-		String String = response.body().string();
-		GitHubUser gitHubUser=JSON.parseObject(String,GitHubUser.class);
+		Response response = client.newCall(request).execute();		
+		String string = response.body().string();		
+		GitHubUser gitHubUser=JSON.parseObject(string,GitHubUser.class);
 		return gitHubUser;
 	} catch (IOException e) {
 		// TODO Auto-generated catch block

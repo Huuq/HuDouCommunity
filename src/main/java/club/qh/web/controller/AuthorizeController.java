@@ -25,11 +25,11 @@ public class AuthorizeController {
 	private GitHubProvider gitHubProvider;
 	@Autowired
 	private UserMapper userMapper;
-	@Value("$(github.client.id)")
+	@Value("${github.client.id}")
 	private String clientId;
-	@Value("$(github.client.secret)")
+	@Value("${github.client.secret}")
 	private String clientSecret;
-	@Value("$(github.redirect.uri)")
+	@Value("${github.redirect.uri}")
 	private String redirectUri;
 	@RequestMapping("/callback")
 	public String callBack(@RequestParam(name="code")String code,@RequestParam(name="state")String state,
@@ -40,27 +40,26 @@ public class AuthorizeController {
 		accessTokenDTO.setState(state);
 		accessTokenDTO.setRedirect_uri(redirectUri);
 		accessTokenDTO.setClient_id(clientId);
-		accessTokenDTO.setClient_secret(clientSecret);
+		accessTokenDTO.setClient_secret(clientSecret);	
 		String accessToken=gitHubProvider.getAccessToken(accessTokenDTO);
 		GitHubUser user = gitHubProvider.getUser(accessToken);
-		if(user!=null) {
-			User userInsert = new User();
-			String token = UUID.randomUUID().toString();
-			userInsert.setToken(token);
-			userInsert.setName(user.getName());
-			userInsert.setAccountId(String.valueOf(user.getId())); 
-			userInsert.setGmtCreate(System.currentTimeMillis());
-			userInsert.setGmtModified(userInsert.getGmtCreate());
-			userInsert.setAvaterUrl(user.getAvaterUrl());
-			userMapper.insert(userInsert);			
-			//将token放入cookie中
-			response.addCookie(new Cookie("token", token));
-			request.getSession().setAttribute("user", user);
-			return "redirect:/";
-		}
-		else {
-			return "redirect:/";
-		}		
+		User userInsert = new User();
+		String token = UUID.randomUUID().toString();
+		userInsert.setToken(token);
+		userInsert.setName(user.getName());
+		userInsert.setBio(user.getBio());
+		userInsert.setAccountId(String.valueOf(user.getId())); 
+		userInsert.setGmtCreate(System.currentTimeMillis());
+		userInsert.setGmtModified(userInsert.getGmtCreate());
+		userInsert.setAvatarUrl(user.getAvatarUrl());
+		userInsert.setBlog(user.getBlog());
+		userInsert.setCompany(user.getCompany());
+		userInsert.setLocation(user.getLocation());
+		userMapper.insert(userInsert);			
+		//将token放入cookie中
+		response.addCookie(new Cookie("token", token));
+		request.getSession().setAttribute("user", user);
+		return "redirect:/tohome";		
 	}
 
 }

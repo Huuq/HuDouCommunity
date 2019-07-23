@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class WeChatController {
-   @RequestMapping("/index")
+   @RequestMapping("/weChatindex")
    public String toWeChatLogin() {
-	   return "index";
+	   return "wechat";
    }
 }
