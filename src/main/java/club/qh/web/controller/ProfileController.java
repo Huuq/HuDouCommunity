@@ -34,7 +34,7 @@ public class ProfileController {
 			model.addAttribute("section", "replies");
 			model.addAttribute("sectionName", "最新回复");
 		}
-		System.out.println(user.getId()+"user信息打印");
+		System.out.println(user.toString()+"user信息打印");
 		PaginationDTO pagination = questionService.list(user.getId(),page,size);
 		System.out.println(pagination);
 		model.addAttribute("pagination", pagination);

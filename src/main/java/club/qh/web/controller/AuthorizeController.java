@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import club.qh.web.Model.User;
 import club.qh.web.dto.AccessTokenDTO;
 import club.qh.web.dto.GitHubUser;
-import club.qh.web.mapper.UserMapper;
 import club.qh.web.provider.GitHubProvider;
+import club.qh.web.service.UserService;
 
 @Controller
 public class AuthorizeController {
@@ -24,7 +24,7 @@ public class AuthorizeController {
 	@Autowired
 	private GitHubProvider gitHubProvider;
 	@Autowired
-	private UserMapper userMapper;
+	private UserService userService;
 	@Value("${github.client.id}")
 	private String clientId;
 	@Value("${github.client.secret}")
@@ -55,11 +55,20 @@ public class AuthorizeController {
 		userInsert.setBlog(user.getBlog());
 		userInsert.setCompany(user.getCompany());
 		userInsert.setLocation(user.getLocation());
-		userMapper.insert(userInsert);			
+		User userE = userService.createOrUpdate(userInsert);	
+		System.out.println(userE.toString());
 		//将token放入cookie中
 		response.addCookie(new Cookie("token", token));
-		request.getSession().setAttribute("user", user);
+		request.getSession().setAttribute("user", userE);
 		return "redirect:/tohome";		
 	}
-
+	@RequestMapping("/loginOut")
+	public String loginOut(HttpServletRequest request,HttpServletResponse response) {
+		request.getSession().removeAttribute("user");
+		Cookie cookie = new Cookie("token",null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		
+	    return "redirect:/tohome";	
+	}
 }

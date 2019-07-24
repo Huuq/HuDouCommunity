@@ -1,5 +1,7 @@
 package club.qh.web.interceptor;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import club.qh.web.Model.User;
+import club.qh.web.Model.UserExample;
 import club.qh.web.mapper.UserMapper;
 @Service
 public class SesstionIntercpter implements HandlerInterceptor {
@@ -19,16 +22,17 @@ public class SesstionIntercpter implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		Cookie[] cookies = request.getCookies();
-		User user = null;
+		//User user = null;
 		if(cookies!=null&&cookies.length!=0) {
 			   for(Cookie cookie:cookies) {
 				   if(cookie.getName().equals("token")) {
 					   String token = cookie.getValue();
-					   user = userMapper.findByToken(token); 
-					   if(user!=null) {				
-						   System.out.println(user.toString());
-						   user.setName("Mr_Right");
-						   request.getSession().setAttribute("user", user);
+					   UserExample userExample = new UserExample();
+					   userExample.createCriteria().andTokenEqualTo(token);
+					   List<User> users = userMapper.selectByExample(userExample);
+					  // user = userMapper.findByToken(token); 
+					   if(users.size()!=0) {							  
+						   request.getSession().setAttribute("user", users.get(0));
 					   }
 					   break;
 				  }			

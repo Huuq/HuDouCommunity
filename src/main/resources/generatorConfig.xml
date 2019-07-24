@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!--<classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+    <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+    <!-- 配置数据库信息 -->
+    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+        connectionURL="jdbc:mysql://127.0.0.1:3306/hudouCommunity?serverTimezone=Asia/Shanghai" 
+        userId="root"
+        password="QYLHJQ526919606">
+        <property name="nullCatalogMeansCurrent" value="true"/>        
+    </jdbcConnection>
+    <!-- 配置数据库信息 -->
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="club.qh.web.Model" targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" /><!--可去掉查询语句的空格 -->
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
+      <property name="enableSubPackages" value="true" /><!--自动创建子目录-->
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="club.qh.web.mapper"  targetProject="src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+    <table tableName="User" domainObjectName="User" ></table>
+    <table tableName="Question" domainObjectName="Question" ></table>
+      <!--默认为false,表示字段会按驼峰标识生成<property name="useActualColumnNames" value="false"/>-->
+      <!--在进行数据库操作时会自动生成一个key,不同数据库会不同<generatedKey column="ID" sqlStatement="DB2" identity="true" />-->
+      <!--<columnOverride column="DATE_FIELD" property="startDate" />-->
+      <!--<ignoreColumn column="FRED" />-->
+      <!--<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
+   
+  </context>
+</generatorConfiguration>
