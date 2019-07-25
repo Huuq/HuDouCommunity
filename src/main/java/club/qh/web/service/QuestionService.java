@@ -13,6 +13,9 @@ import club.qh.web.Model.QuestionExample;
 import club.qh.web.Model.User;
 import club.qh.web.dto.PaginationDTO;
 import club.qh.web.dto.QuestionDTO;
+import club.qh.web.exception.CustomizeErrorCode;
+import club.qh.web.exception.CustomizeException;
+import club.qh.web.mapper.QuestionExitMapper;
 import club.qh.web.mapper.QuestionMapper;
 import club.qh.web.mapper.UserMapper;
 
@@ -20,6 +23,10 @@ import club.qh.web.mapper.UserMapper;
 public class QuestionService {
 	@Autowired
 	private QuestionMapper questionMapper;
+	
+	@Autowired
+	private QuestionExitMapper questionExtMapper;
+	
 	@Autowired
 	private UserMapper userMapper;
 
@@ -36,7 +43,7 @@ public class QuestionService {
 		page = size*(page-1);		
 		List<Question> list = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(page, size));
 		List<QuestionDTO> questionDtoList = new ArrayList<QuestionDTO>();
-		for(Question question:list) {
+		for(Question question:list) {		
 			User user = userMapper.selectByPrimaryKey(question.getCreator());					
 			QuestionDTO questionDto = new QuestionDTO();
 			BeanUtils.copyProperties(question, questionDto);
@@ -77,9 +84,11 @@ public class QuestionService {
 
 	public QuestionDTO getQuestionDtoById(Integer id) {
 		Question question = questionMapper.selectByPrimaryKey(id);
+		if(question==null) {
+			throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+		}
 		QuestionDTO questionDto = new QuestionDTO();
 		BeanUtils.copyProperties(question, questionDto);
-		System.out.println(question.getCreator()+"用户id");
 		User user = userMapper.selectByPrimaryKey(question.getCreator());
 		questionDto.setUser(user);
 		// TODO Auto-generated method stub
@@ -90,19 +99,29 @@ public class QuestionService {
 		if(question.getId()==null) {
 			question.setGmtCreate(System.currentTimeMillis());
 			question.setGmtModified(question.getGmtCreate());
-			questionMapper.insert(question);
-			//questionMapper.createQuestion(question);
+			questionMapper.insert(question);		
 		}else {
 			Question questionupdate = new Question();
+			questionupdate.setId(question.getId());			
 			questionupdate.setGmtModified(question.getGmtCreate());
 			questionupdate.setTitle(question.getTitle());
 			questionupdate.setDescription(question.getDescription());
 			questionupdate.setTag(question.getTag());
 			QuestionExample questionExample = new QuestionExample();
 			questionExample.createCriteria().andIdEqualTo(question.getId());
-			questionMapper.updateByExample(questionupdate, questionExample);
+			int update = questionMapper.updateByExample(questionupdate, questionExample);
+			if(update!=1) {
+				throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+			}
 			//questionMapper.updateQuestion(question);
 		}
+		// TODO Auto-generated method stub		
+	}
+	public void incView(Integer id) {		
+		Question updateQuestion = new Question();		
+		updateQuestion.setId(id);
+		updateQuestion.setViewCount(1);
+		questionExtMapper.incView(updateQuestion);
 		// TODO Auto-generated method stub
 		
 	}

@@ -7,8 +7,8 @@ public class QuestionDTO {
 	private String title;
 	private String description;
     private String tag;
-    private long gmtCreate;
-    private long gmtModified;
+    private Long gmtCreate;
+    private Long gmtModified;
     private Integer creator;
     private Integer viewCount;
     private Integer commentCount;
@@ -42,13 +42,13 @@ public class QuestionDTO {
 	public long getGmtCreate() {
 		return gmtCreate;
 	}
-	public void setGmtCreate(long gmtCreate) {
+	public void setGmtCreate(Long gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
 	public long getGmtModified() {
 		return gmtModified;
 	}
-	public void setGmtModified(long gmtModified) {
+	public void setGmtModified(Long gmtModified) {
 		this.gmtModified = gmtModified;
 	}
 	public Integer getCreator() {

@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ public class PublishController {
 	@Autowired
 	private QuestionService questionService;
 	
-	@GetMapping("/publish/{id}")
+	@RequestMapping("/publish/{id}")
 	public String edit(@PathVariable(name="id")Integer id,Model model) {
 		QuestionDTO question = questionService.getQuestionDtoById(id);
 		model.addAttribute("title", question.getTitle());
@@ -46,7 +45,7 @@ public class PublishController {
 	{	
 		System.out.println("将发布信息提交到数据库");	
 		Question question = new Question();
-		User user = (User)request.getSession().getAttribute("user");
+		User user = (User)request.getSession().getAttribute("user");		
 		model.addAttribute("title",title);
 		model.addAttribute("description",description);
 		model.addAttribute("tag", tag);

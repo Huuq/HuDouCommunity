@@ -89,7 +89,7 @@
 			<plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>5.2.4</version>
+                <version>5.2.4</version><!--$NO-MVN-MAN-VER$-->
                 <configuration>
                     <driver>com.mysql.cj.jdbc.Driver</driver>
                     <url>jdbc:mysql://127.0.0.1:3306/hudouCommunity?serverTimezone=Asia/Shanghai</url>
